@@ -88,10 +88,6 @@ class CursMdSpider(Spider):
                         'normalize-space(//tr[' + str(i) + ']/td[14])').extract()[0]
                 sell_chf = row.xpath(
                         'normalize-space(//tr[' + str(i) + ']/td[15])').extract()[0]
-                buy_try = row.xpath(
-                        'normalize-space(//tr[' + str(i) + ']/td[16])').extract()[0]
-                sell_try = row.xpath(
-                        'normalize-space(//tr[' + str(i) + ']/td[17])').extract()[0]
 
 
                 # Add all info from one bank in list
@@ -112,8 +108,6 @@ class CursMdSpider(Spider):
                 bank_info.append(sell_gbp)
                 bank_info.append(buy_chf)
                 bank_info.append(sell_chf)
-                bank_info.append(buy_try)
-                bank_info.append(sell_try)
 
 
                 # Add all banks info in one list
