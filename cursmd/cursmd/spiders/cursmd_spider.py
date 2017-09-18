@@ -238,6 +238,20 @@ class CursMdSpider(Spider):
         chf_result_total = get_one_max_num(max_chf_info) - get_one_min_num(min_chf_info)
 
 
+        # Print only for me
+        def print_for_me(value, total, buy, sell):
+            print(value + " %.2f" % total,
+                    '|', 'B -', get_one_max_num(buy),
+                    '|', 'S -', get_one_min_num(sell))
+
+        print_for_me("USD", usd_result_total, max_usd_info, min_usd_info)
+        print_for_me("EUR", eur_result_total, max_eur_info, min_eur_info)
+        print_for_me("RUB", rub_result_total, max_rub_info, min_rub_info)
+        print_for_me("RON", ron_result_total, max_ron_info, min_ron_info)
+        print_for_me("UAH", uah_result_total, max_uah_info, min_uah_info)
+        print_for_me("GBP", gbp_result_total, max_gbp_info, min_gbp_info)
+        print_for_me("CHF", chf_result_total, max_chf_info, min_chf_info)
+
         # If value is > 0 we dont add it to csv
         if usd_result_total > 0:
             final_list_info.append(max_usd_info)
