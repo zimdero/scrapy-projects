@@ -119,43 +119,43 @@ class CursMdSpider(Spider):
                 # Add all money to his list
                 # Buy money to buy list
                 # Sell money to sell list
-                if buy_usd and sell_ron != '-':
+                if buy_usd and buy_usd != '-':
                     max_usd_list.append(buy_usd)
 
-                if sell_usd and sell_ron != '-':
+                if sell_usd and sell_usd != '-':
                     min_usd_list.append(sell_usd)
 
-                if buy_eur and sell_ron != '-':
+                if buy_eur and buy_eur != '-':
                     max_eur_list.append(buy_eur)
 
-                if sell_eur and sell_ron != '-':
+                if sell_eur and sell_eur != '-':
                     min_eur_list.append(sell_eur)
 
-                if buy_rub and sell_ron != '-':
+                if buy_rub and buy_rub != '-':
                     max_rub_list.append(buy_rub)
 
-                if sell_rub and sell_ron != '-':
+                if sell_rub and sell_rub != '-':
                     min_rub_list.append(sell_rub)
 
-                if buy_ron and sell_ron != '-':
+                if buy_ron and buy_ron != '-':
                     max_ron_list.append(buy_ron)
 
                 if sell_ron and sell_ron != '-':
                     min_ron_list.append(sell_ron)
 
-                if buy_uah and sell_ron != '-':
+                if buy_uah and buy_uah != '-':
                     max_uah_list.append(buy_uah)
 
                 if sell_uah and sell_uah != '-':
                     min_uah_list.append(sell_uah)
 
-                if buy_gbp and sell_gbp != '-':
+                if buy_gbp and buy_gbp != '-':
                     max_gbp_list.append(buy_gbp)
 
                 if sell_gbp and sell_gbp != '-':
                     min_gbp_list.append(sell_gbp)
 
-                if buy_chf and sell_chf != '-':
+                if buy_chf and buy_chf != '-':
                     max_chf_list.append(buy_chf)
 
                 if sell_chf and sell_chf != '-':
