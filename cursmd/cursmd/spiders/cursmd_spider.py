@@ -9,6 +9,9 @@ class CursMdSpider(Spider):
 
     def parse(self, response):
         tableBody = response.xpath('//*[@id="tabelBankValute"]/tbody')
+
+        final_list_info = []
+
         max_usd_list = []
         min_usd_list = []
         max_eur_list = []
@@ -23,29 +26,25 @@ class CursMdSpider(Spider):
         min_gbp_list = []
         max_chf_list = []
         min_chf_list = []
-        max_try_list = []
-        min_try_list = []
 
-        max_usd_info = []
-        min_usd_info = []
-        max_eur_info = []
-        min_eur_info = []
+        max_usd_info = ['Buy usd']
+        min_usd_info = ['Sell usd']
+        max_eur_info = ['Buy eur']
+        min_eur_info = ['Sell eur']
+        max_rub_info = ['Buy rub']
+        min_rub_info = ['Sell rub']
+        max_ron_info = ['Buy ron']
+        min_ron_info = ['Sell ron']
+        max_uah_info = ['Buy uah']
+        min_uah_info = ['Sell uah']
+        max_gbp_info = ['Buy gbp']
+        min_gbp_info = ['Sell gbp']
+        max_chf_info = ['Buy chf']
+        min_chf_info = ['Sell chf']
 
-        final_info = []
-        final_info_first_line = [
-                'Bank name', 'Max usd', 'Min usd'
-                ]
-        final_info.append(final_info_first_line)
+
         all_data = []
-        first_line = [
-                'Nr', 'Bank Name', 'Info', 'Usd buy', 'Usd sell',
-                'Eur buy', 'Eur sell', 'Rub buy', 'Rub sell',
-                'Ron buy', 'Ron sell', 'Uah buy', 'Uah sell', 
-                'Gbp buy', 'Gbp sell', 'Chf buy', 'Chf sell'
-                ]
-        all_data.append(first_line)
         i = 2
-        j = 0
 
 
         while True:
@@ -88,16 +87,9 @@ class CursMdSpider(Spider):
                         'normalize-space(//tr[' + str(i) + ']/td[16])').extract()[0]
                 sell_try = row.xpath(
                         'normalize-space(//tr[' + str(i) + ']/td[17])').extract()[0]
-                #print(i, bank_name, bnm, 
-                #        buy_usd, sell_usd, 
-                #        buy_eur, sell_eur,
-                #        buy_rub, sell_rub,
-                #        buy_ron, sell_ron,
-                #        buy_uah, sell_uah,
-                #        buy_gbp, sell_gbp,
-                #        buy_chf, sell_chf,
-                #        buy_try, sell_try
-                #        )
+
+
+
                 bank_info.append(i)
                 bank_info.append(bank_name)
                 bank_info.append(bnm)
@@ -163,12 +155,6 @@ class CursMdSpider(Spider):
                 if sell_chf and sell_chf != '-':
                     min_chf_list.append(sell_chf)
 
-                if buy_chf and sell_chf != '-':
-                    max_chf_list.append(buy_chf)
-
-                if sell_try and sell_try != '-':
-                    min_chf_list.append(sell_chf)
-
                 if not bank_name:
                     break_while = 'break'
                 i += 1
@@ -176,43 +162,96 @@ class CursMdSpider(Spider):
             if break_while == 'break':
                 break
 
-        print(
-                max(max_usd_list), min(min_usd_list),
-                max(max_eur_list), min(min_eur_list),
-                max(max_rub_list), min(min_rub_list),
-                max(max_ron_list), min(min_ron_list),
-                max(max_uah_list), min(min_uah_list),
-                max(max_gbp_list), min(min_gbp_list),
-                max(max_chf_list), min(min_chf_list),
-                )
+        # Change , to . (split)
+        # From 00,000 to 00.000 ( float )
+        def change_to_dot(value):
+            split_value = max(value).split(',')
+            return split_value[0] + '.' + split_value[1]
 
+
+        # Add to list all money to their lists
+        def add_to_list(money, _list_with_data, _numb_from_td, _list_to_add_info):
+            if max(money) in _list_with_data[_numb_from_td]:
+                _list_to_add_info.append(bank_data[1])
+                _list_to_add_info.append(float(change_to_dot(money)))
+            
 
         for bank_data in all_data:
-            if max(max_usd_list) in bank_data[3]:
-                max_usd_info.append(bank_data[1])
-                max_usd_info.append(max(max_usd_list))
+            add_to_list(max_usd_list, bank_data, 3, max_usd_info)
 
-            if min(min_usd_list) in bank_data[4]:
-                min_usd_info.append(bank_data[1])
-                min_usd_info.append(min(min_usd_list))
+            add_to_list(min_usd_list, bank_data, 4, min_usd_info)
 
-            if max(max_eur_list) in bank_data[5]:
-                max_eur_info.append(bank_data[1])
-                max_eur_info.append(max(max_eur_list))
+            add_to_list(max_eur_list, bank_data, 5, max_eur_info)
 
-            if min(min_eur_list) in bank_data[6]:
-                min_eur_info.append(bank_data[1])
-                min_eur_info.append(min(min_eur_list))
+            add_to_list(min_eur_list, bank_data, 6, min_eur_info)
 
-        print(
-                max_usd_info,
-                min_usd_info,
-                max_eur_info,
-                min_eur_info,
-                )
-        out = open('results.csv', 'w')
+            add_to_list(max_rub_list, bank_data, 7, max_rub_info)
 
-        for row in all_data:
+            add_to_list(min_rub_list, bank_data, 8, min_rub_info)
+
+            add_to_list(max_ron_list, bank_data, 9, max_ron_info)
+
+            add_to_list(min_ron_list, bank_data, 10, min_ron_info)
+
+            add_to_list(max_uah_list, bank_data, 11, max_uah_info)
+
+            add_to_list(min_uah_list, bank_data, 12, min_uah_info)
+
+            add_to_list(max_gbp_list, bank_data, 13, max_gbp_info)
+
+            add_to_list(min_gbp_list, bank_data, 14, min_gbp_info)
+
+            add_to_list(max_chf_list, bank_data, 15, max_chf_info)
+
+            add_to_list(min_chf_list, bank_data, 16, min_chf_info)
+
+
+        final_list_info.append(max_usd_info)
+        final_list_info.append(min_usd_info)
+        final_list_info.append(max_eur_info)
+        final_list_info.append(min_eur_info)
+        final_list_info.append(max_rub_info)
+        final_list_info.append(min_rub_info)
+        final_list_info.append(max_ron_info)
+        final_list_info.append(min_ron_info)
+        final_list_info.append(max_uah_info)
+        final_list_info.append(min_uah_info)
+        final_list_info.append(max_gbp_info)
+        final_list_info.append(min_gbp_info)
+        final_list_info.append(max_chf_info)
+        final_list_info.append(min_chf_info)
+
+
+        def get_one_max_num(money_value):
+            for money in money_value:
+                if isinstance(money, float):
+                    return money
+
+        def get_one_min_num(money_value):
+            for money in money_value:
+                if isinstance(money, float):
+                    return money
+
+        usd_result_total = get_one_max_num(max_usd_info) - get_one_min_num(min_usd_info)
+        eur_result_total = get_one_max_num(max_eur_info) - get_one_min_num(min_eur_info)
+        rub_result_total = get_one_max_num(max_rub_info) - get_one_min_num(min_rub_info)
+        ron_result_total = get_one_max_num(max_ron_info) - get_one_min_num(min_ron_info)
+        uah_result_total = get_one_max_num(max_uah_info) - get_one_min_num(min_uah_info)
+        gbp_result_total = get_one_max_num(max_gbp_info) - get_one_min_num(min_gbp_info)
+        chf_result_total = get_one_max_num(max_chf_info) - get_one_min_num(min_chf_info)
+
+        final_list_info.append(['Usd Total', "%.2f" % usd_result_total])
+        final_list_info.append(['Eur Total', "%.2f" % eur_result_total])
+        final_list_info.append(['Rub Total', "%.2f" % rub_result_total])
+        final_list_info.append(['Ron Total', "%.2f" % ron_result_total])
+        final_list_info.append(['Uah Total', "%.2f" % uah_result_total])
+        final_list_info.append(['Gbp Total', "%.2f" % gbp_result_total])
+        final_list_info.append(['Chf Total', "%.2f" % chf_result_total])
+
+        out = open('results.csv', 'a')
+
+        for row in final_list_info:
+            #print(row)
             for column in row:
                 out.write('%s;' % column)
             out.write('\n')
