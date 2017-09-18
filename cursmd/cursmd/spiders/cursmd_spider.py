@@ -58,7 +58,10 @@ class CursMdSpider(Spider):
             for row in tableBody:
                 bank_name = row.xpath(
                         'normalize-space(//tr[' + str(i) + ']/td[1]/a)').extract()[0]
-                bnm = row.xpath(
+                # 1. BNM
+                # 2. only in center bank
+                # 3. Close or are different
+                sup = row.xpath(
                         'normalize-space(//tr[' + str(i) + ']/td[1]/sup)').extract()[0]
                 buy_usd = row.xpath(
                         'normalize-space(//tr[' + str(i) + ']/td[2])').extract()[0]
@@ -93,7 +96,7 @@ class CursMdSpider(Spider):
                 # Add all info from one bank in list
                 bank_info.append(i)
                 bank_info.append(bank_name)
-                bank_info.append(bnm)
+                bank_info.append(sup)
                 bank_info.append(buy_usd)
                 bank_info.append(sell_usd)
                 bank_info.append(buy_eur)
