@@ -17,20 +17,7 @@ class CursMdSpider(Spider):
 
         final_list_info = [['Date', ymd, hms]]
 
-        buy_usd_list = []
-        sell_usd_list = []
-        buy_eur_list = []
-        sell_eur_list = []
-        buy_rub_list = []
-        sell_rub_list = []
-        buy_ron_list = []
-        sell_ron_list = []
-        buy_uah_list = []
-        sell_uah_list = []
-        buy_gbp_list = []
-        sell_gbp_list = []
-        buy_chf_list = []
-        sell_chf_list = []
+        money_dict = {}
 
         buy_usd_info = ['Buy usd']
         sell_usd_info = ['Sell usd']
@@ -119,31 +106,33 @@ class CursMdSpider(Spider):
                 # Add all money to his list
                 # Buy money to buy list
                 # Sell money to sell list
-                def add_money_to_list(money, money_to_add):
+                def append_to(money, key):
                     if money and money != '-':
-                        money_to_add.append(money)
+                        if not key in money_dict:
+                            money_dict[key] = []
+                        money_dict[key].append(money)
 
                 # USD
-                add_money_to_list(buy_usd, buy_usd_list)
-                add_money_to_list(sell_usd, sell_usd_list)
+                append_to(buy_usd, 'buy_usd')
+                append_to(sell_usd, 'sell_usd')
                 # EUR
-                add_money_to_list(buy_eur, buy_eur_list)
-                add_money_to_list(sell_eur, sell_eur_list)
+                append_to(buy_eur, 'buy_eur')
+                append_to(sell_eur, 'sell_eur')
                 # RUB
-                add_money_to_list(buy_rub, buy_rub_list)
-                add_money_to_list(sell_rub, sell_rub_list)
+                append_to(buy_rub, 'buy_rub')
+                append_to(sell_rub, 'sell_rub')
                 # RON
-                add_money_to_list(buy_ron, buy_ron_list)
-                add_money_to_list(sell_ron, sell_ron_list)
+                append_to(buy_ron, 'buy_ron')
+                append_to(sell_ron, 'sell_ron')
                 # UAJ
-                add_money_to_list(buy_uah, buy_uah_list)
-                add_money_to_list(sell_uah, sell_uah_list)
+                append_to(buy_uah, 'buy_uah')
+                append_to(sell_uah, 'sell_uah')
                 # GBP
-                add_money_to_list(buy_gbp, buy_gbp_list)
-                add_money_to_list(sell_gbp, sell_gbp_list)
+                append_to(buy_gbp, 'buy_gbp')
+                append_to(sell_gbp, 'sell_gbp')
                 # CHF
-                add_money_to_list(buy_chf, buy_chf_list)
-                add_money_to_list(sell_chf, sell_chf_list)
+                append_to(buy_chf, 'buy_chf')
+                append_to(sell_chf, 'sell_chf')
 
                 if not bank_name:
                     break_while = 'break'
@@ -180,33 +169,33 @@ class CursMdSpider(Spider):
         # With names of banks
         # And change , to .
         for bank_data in all_data:
-            add_to_buy_list(buy_usd_list, bank_data, 3, buy_usd_info)
+            add_to_buy_list(money_dict['buy_usd'], bank_data, 3, buy_usd_info)
 
-            add_to_sell_list(sell_usd_list, bank_data, 4, sell_usd_info)
+            add_to_sell_list(money_dict['sell_usd'], bank_data, 4, sell_usd_info)
 
-            add_to_buy_list(buy_eur_list, bank_data, 5, buy_eur_info)
+            add_to_buy_list(money_dict['buy_eur'], bank_data, 5, buy_eur_info)
 
-            add_to_sell_list(sell_eur_list, bank_data, 6, sell_eur_info)
+            add_to_sell_list(money_dict['sell_eur'], bank_data, 6, sell_eur_info)
 
-            add_to_buy_list(buy_rub_list, bank_data, 7, buy_rub_info)
+            add_to_buy_list(money_dict['buy_rub'], bank_data, 7, buy_rub_info)
 
-            add_to_sell_list(sell_rub_list, bank_data, 8, sell_rub_info)
+            add_to_sell_list(money_dict['sell_rub'], bank_data, 8, sell_rub_info)
 
-            add_to_buy_list(buy_ron_list, bank_data, 9, buy_ron_info)
+            add_to_buy_list(money_dict['buy_ron'], bank_data, 9, buy_ron_info)
 
-            add_to_sell_list(sell_ron_list, bank_data, 10, sell_ron_info)
+            add_to_sell_list(money_dict['sell_ron'], bank_data, 10, sell_ron_info)
 
-            add_to_buy_list(buy_uah_list, bank_data, 11, buy_uah_info)
+            add_to_buy_list(money_dict['buy_uah'], bank_data, 11, buy_uah_info)
 
-            add_to_sell_list(sell_uah_list, bank_data, 12, sell_uah_info)
+            add_to_sell_list(money_dict['sell_uah'], bank_data, 12, sell_uah_info)
 
-            add_to_buy_list(buy_gbp_list, bank_data, 13, buy_gbp_info)
+            add_to_buy_list(money_dict['buy_gbp'], bank_data, 13, buy_gbp_info)
 
-            add_to_sell_list(sell_gbp_list, bank_data, 14, sell_gbp_info)
+            add_to_sell_list(money_dict['sell_gbp'], bank_data, 14, sell_gbp_info)
 
-            add_to_buy_list(buy_chf_list, bank_data, 15, buy_chf_info)
+            add_to_buy_list(money_dict['buy_chf'], bank_data, 15, buy_chf_info)
 
-            add_to_sell_list(sell_chf_list, bank_data, 16, sell_chf_info)
+            add_to_sell_list(money_dict['sell_chf'], bank_data, 16, sell_chf_info)
 
 
         # Get only one maximum value from buy list if in list is many values
@@ -251,32 +240,30 @@ class CursMdSpider(Spider):
             final_list_info.append(buy_usd_info)
             final_list_info.append(sell_usd_info)
             final_list_info.append(['Usd Total', "%.2f" % usd_result_total])
-        elif eur_result_total > 0:
+        if eur_result_total > 0:
             final_list_info.append(buy_eur_info)
             final_list_info.append(sell_eur_info)
             final_list_info.append(['Eur Total', "%.2f" % eur_result_total])
-        elif rub_result_total > 0:
+        if rub_result_total > 0:
             final_list_info.append(buy_rub_info)
             final_list_info.append(sell_rub_info)
             final_list_info.append(['Rub Total', "%.2f" % rub_result_total])
-        elif ron_result_total > 0:
+        if ron_result_total > 0:
             final_list_info.append(buy_ron_info)
             final_list_info.append(sell_ron_info)
             final_list_info.append(['Ron Total', "%.2f" % ron_result_total])
-        elif uah_result_total > 0:
+        if uah_result_total > 0:
             final_list_info.append(buy_uah_info)
             final_list_info.append(sell_uah_info)
             final_list_info.append(['Uah Total', "%.2f" % uah_result_total])
-        elif gbp_result_total > 0:
+        if gbp_result_total > 0:
             final_list_info.append(buy_gbp_info)
             final_list_info.append(sell_gbp_info)
             final_list_info.append(['Gbp Total', "%.2f" % gbp_result_total])
-        elif chf_result_total > 0:
+        if chf_result_total > 0:
             final_list_info.append(buy_chf_info)
             final_list_info.append(sell_chf_info)
             final_list_info.append(['Chf Total', "%.2f" % chf_result_total])
-        else:
-            final_list_info.append(['Nothing today'])
 
         final_list_info.append([''])
 
