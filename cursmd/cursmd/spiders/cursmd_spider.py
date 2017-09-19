@@ -152,51 +152,61 @@ class CursMdSpider(Spider):
             if break_while == 'break':
                 break
 
-        # Change , to . (split)
+        # Change , to . (split) max
         # From 00,000 to 00.000 ( float )
-        def change_to_dot(value):
-            split_value = max(value).split(',')
+        def change_to_dot(value, max_or_min):
+            if max_or_min == 'max':
+                split_value = max(value).split(',')
+            else:
+                split_value = min(value).split(',')
+
             return split_value[0] + '.' + split_value[1]
 
 
         # Add to list all money to their lists
-        def add_to_list(money, _list_with_data, _numb_from_td, _list_to_add_info):
+        def add_to_buy_list(money, _list_with_data, _numb_from_td, _list_to_add_info):
             if max(money) in _list_with_data[_numb_from_td]:
                 _list_to_add_info.append(bank_data[1])
-                _list_to_add_info.append(float(change_to_dot(money)))
+                _list_to_add_info.append(float(change_to_dot(money, 'max')))
+
+        # Add to list all money to their lists
+        def add_to_sell_list(money, _list_with_data, _numb_from_td, _list_to_add_info):
+            if min(money) in _list_with_data[_numb_from_td]:
+                _list_to_add_info.append(bank_data[1])
+                _list_to_add_info.append(float(change_to_dot(money, 'min')))
             
 
         # Get only maxminum value or only minumum value
         # With names of banks
         # And change , to .
         for bank_data in all_data:
-            add_to_list(buy_usd_list, bank_data, 3, buy_usd_info)
+            add_to_buy_list(buy_usd_list, bank_data, 3, buy_usd_info)
 
-            add_to_list(sell_usd_list, bank_data, 4, sell_usd_info)
+            add_to_sell_list(sell_usd_list, bank_data, 4, sell_usd_info)
 
-            add_to_list(buy_eur_list, bank_data, 5, buy_eur_info)
+            add_to_buy_list(buy_eur_list, bank_data, 5, buy_eur_info)
 
-            add_to_list(sell_eur_list, bank_data, 6, sell_eur_info)
+            add_to_sell_list(sell_eur_list, bank_data, 6, sell_eur_info)
 
-            add_to_list(buy_rub_list, bank_data, 7, buy_rub_info)
+            add_to_buy_list(buy_rub_list, bank_data, 7, buy_rub_info)
 
-            add_to_list(sell_rub_list, bank_data, 8, sell_rub_info)
+            add_to_sell_list(sell_rub_list, bank_data, 8, sell_rub_info)
 
-            add_to_list(buy_ron_list, bank_data, 9, buy_ron_info)
+            add_to_buy_list(buy_ron_list, bank_data, 9, buy_ron_info)
 
-            add_to_list(sell_ron_list, bank_data, 10, sell_ron_info)
+            add_to_sell_list(sell_ron_list, bank_data, 10, sell_ron_info)
 
-            add_to_list(buy_uah_list, bank_data, 11, buy_uah_info)
+            add_to_buy_list(buy_uah_list, bank_data, 11, buy_uah_info)
 
-            add_to_list(sell_uah_list, bank_data, 12, sell_uah_info)
+            add_to_sell_list(sell_uah_list, bank_data, 12, sell_uah_info)
 
-            add_to_list(buy_gbp_list, bank_data, 13, buy_gbp_info)
+            add_to_buy_list(buy_gbp_list, bank_data, 13, buy_gbp_info)
 
-            add_to_list(sell_gbp_list, bank_data, 14, sell_gbp_info)
+            add_to_sell_list(sell_gbp_list, bank_data, 14, sell_gbp_info)
 
-            add_to_list(buy_chf_list, bank_data, 15, buy_chf_info)
+            add_to_buy_list(buy_chf_list, bank_data, 15, buy_chf_info)
 
-            add_to_list(sell_chf_list, bank_data, 16, sell_chf_info)
+            add_to_sell_list(sell_chf_list, bank_data, 16, sell_chf_info)
 
 
         # Get only one maximum value from buy list if in list is many values
